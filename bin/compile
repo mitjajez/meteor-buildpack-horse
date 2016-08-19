@@ -91,9 +91,7 @@ fi
 # Install node
 #
 echo "-----> Installing node"
-#NODE_VERSION=`curl -sS --get https://semver.io/node/resolve/0.10.x`
-NODE_VERSION=`curl -sS --get https://semver.io/node/resolve/0.12.x`
-#NODE_VERSION=`curl -sS --get https://semver.io/node/resolve/4.x.x`
+NODE_VERSION=`curl -sS --get https://semver.io/node/resolve/4.4.x`
 NODE_URL="http://s3pository.heroku.com/node/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz"
 curl -sS $NODE_URL -o - | tar -zxf - -C $COMPILE_DIR --strip 1
 # Export some environment variables for npm to use when compiling stuff.
@@ -166,7 +164,7 @@ fi
 # recurse, trying to bundle up its own bundling.
 BUNDLE_DEST=`mktemp -d "$BUILDPACK_DIR/build-XXXX"`
 echo "-----> Building Meteor with ROOT_URL: $ROOT_URL"
-HOME=$METEOR_DIR $METEOR build --server $ROOT_URL $SERVER_ONLY_FLAG --directory $BUNDLE_DEST
+HOME=$METEOR_DIR NODE_OPTIONS='--max_old_space_size=2048' $METEOR build --server $ROOT_URL $SERVER_ONLY_FLAG --directory $BUNDLE_DEST
 mv $BUNDLE_DEST/bundle "$COMPILE_DIR/app"
 rmdir $BUNDLE_DEST
 
