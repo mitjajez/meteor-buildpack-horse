@@ -91,7 +91,7 @@ fi
 # Install node
 #
 echo "-----> Installing node"
-NODE_VERSION=`curl -sS --get https://semver.io/node/resolve/4.4.x`
+NODE_VERSION=`curl -sS --get https://semver.io/node/resolve/4.5.x`
 NODE_URL="http://s3pository.heroku.com/node/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz"
 curl -sS $NODE_URL -o - | tar -zxf - -C $COMPILE_DIR --strip 1
 # Export some environment variables for npm to use when compiling stuff.
@@ -145,7 +145,7 @@ fi
 # If we use npm on root, run npm install.  Don't use `--production` here, as we
 # may need devDependencies (e.g. webpack) in order to build the meteor app.
 if [ -e "$APP_SOURCE_DIR"/package.json ]; then
-  npm install
+  meteor npm install
 fi
 
 # Related to https://github.com/meteor/meteor/issues/2796 and 
@@ -171,7 +171,7 @@ rmdir $BUNDLE_DEST
 # Run npm install on the built slug; only for `--production` dependencies.
 if [ -e "$COMPILE_DIR"/app/programs/server/package.json ]; then
   cd "$COMPILE_DIR"/app/programs/server
-  npm install --production
+  meteor npm install --production
 fi
 
 #
